@@ -19,33 +19,37 @@ InvoiceProccess = {InvoicingProccess[0] : 0, InvoicingProccess[1] : 0, Invoicing
 # this dicionary will have all the invoice information
 INVOICE = {}
 
-# stage variable 
-stage = 0
+# If luis.ai didn't understand if you want to make invoice or not we do it manually using this variable
 wouldYouMakeInvoice = False
+
+# Those variables are for entering the items 
 itemsInserted = 0
 ItemNumber  = 1
 stage6Entered = False
 
 
+
+# A function that route to /invoice where the last invoice is exist
 @chatApp.route('/invoice', methods = ['POST','GET'])
 def InvoiceReport():
     return render_template("invoice.html", result=INVOICE)
 
+# A function where have all the messages as a json file
 @chatApp.route('/chat/GetMessages', methods = ['POST','GET'])
 def getallMessages():
     return jsonify(results = Messages)
 
-
+# A function that gets the message from chat.html
 def getMessage():
     Message = str(request.form.get('Message'))
     return Message
 
+
+# THE FUNCTION WHERE EVERYTHING WORK USING IT. 
 @chatApp.route('/chat', methods = ['POST','GET'])
 def chatBox():
     Message = getMessage()
-    print(Message)
     global wouldYouMakeInvoice
-    global stage
     global ItemNumber
     global itemsInserted
     global stage6Entered
@@ -53,11 +57,14 @@ def chatBox():
         GetIntent = LuisMagic(Message)
         Messages.append(Message)
         getallMessages()
+        # Checking manually if the person want to make an invoice - might not be neccessary it should be the default
+        # to start the invoice. the variable 'wouldYouMakeInvoice' get changed in an else statement down the function.
         if wouldYouMakeInvoice == True:
             if GetIntent == 'Agree':
                 GetIntent = 'CreateInvoice'
-                stage = 0
                 wouldYouMakeInvoice = False
+
+        # Just going step by step in the invoice.
         if GetIntent == 'CreateInvoice' or InvoiceProccess[InvoicingProccess[0]] == 1:
             if InvoiceProccess[InvoicingProccess[0]] == 0:
                 FromName()
@@ -118,7 +125,9 @@ def chatBox():
 
     return render_template("chat.html", string=Messages)
 
+# A function where all the Magic happen, e.g Abrakadabra
 def LuisMagic(Message):
+    # We just get rid of the spaces in the text
     KEYWORD = ''
     SPACE = '%20'
     for i in range(len(Message)):
@@ -127,20 +136,23 @@ def LuisMagic(Message):
         else:
             KEYWORD = KEYWORD + Message[i]
 
+    # making the last URL for where the intent of our message is.
     luis = "https://westus.api.cognitive.microsoft.com/luis/v2.0/apps/3ca01edc-15d6-4ee6-b481-b2840cd6b476?subscription-key=11f1b249304d47bc852d57eb73f036fc&timezoneOffset=-360&q=" + KEYWORD
 
+    # making luis understand the message and json it. 
     with urllib.request.urlopen(luis) as url:
         jsonResponse = json.loads(url.read().decode())
 
+    # Returning the intent
     return jsonResponse['topScoringIntent']['intent']
 
-def ActionByIntent(Intent):
-    return
 
-def FollowProccess(Message,stage):
-    return
+# all the elses are for better chatting quality.
+# will be modified soon.
 
-
+# Those are the functions where have the basic conversations for the steps of the invoice,
+# also the functions make any step that has been proccesed marked by the InvoiceProccess dictionary 
+# so that we won't access it again for no reason.
 def FromName():
     if InvoiceProccess[InvoicingProccess[0]] == 0:
         Messages.append("Hi! Let's start the invoice!, Who is this invoice from ? ")
@@ -198,6 +210,7 @@ def Finish():
         InvoiceProccess[InvoicingProccess[8]] = 1
         Messages.append("Done! redirecting the the invoice")
         #InvoiceReport()
+        # The redirecting is not ready yet.
         return redirect(url_for('InvoiceReport'))
 
     else:
