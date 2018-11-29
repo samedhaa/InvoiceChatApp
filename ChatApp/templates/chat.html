@@ -1,0 +1,67 @@
+<html>
+<body>
+<form></form>
+<div>
+    <div id="MessageWrapper" >
+        <p> get messages</p>
+    </div>
+</div>
+<form action="chat" method = "POST" id="ChatBox">
+<br>
+<input type="text" name="Message">
+<input type="button" id="sendMessage" value="Send">
+</form>
+
+
+
+</body>
+</html>
+<script
+  src="https://code.jquery.com/jquery-3.3.1.min.js"
+  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+  crossorigin="anonymous"></script>
+
+<script>
+    $(document).ready(function(){
+          getMessages();
+    });
+    function getMessages(){
+        $.ajax({
+        url : "chat/GetMessages",
+        method : "POST",
+        success: function(result){
+                var tbl_body = "";
+                var odd_even = false;
+                $.each(result, function() {
+                var tbl_row = "";
+                $.each(this, function(k , v) {
+                    tbl_row += "<p>"+v+"</p> ";
+                })
+                tbl_body += tbl_row;
+                odd_even = !odd_even;
+            })
+            $("#MessageWrapper").html(tbl_body);
+
+            console.log(result);
+        }
+
+      });
+    }
+    $("#GetMessages").click(function (){
+
+        getMessages();
+    });
+    $( "#sendMessage" ).click(function(){
+         $.ajax({
+            url: "chat",
+            method: "POST",
+            data : $("#ChatBox").serializeArray(),
+            success: function(result){
+                getMessages();
+            }
+
+        });
+
+    });
+
+</script>
