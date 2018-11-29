@@ -9,17 +9,11 @@ chatApp = Flask(__name__)
 
 Messages = ['Hi im a bot']
 
-
-# a list has the steps of the invoice
 InvoicingProccess = ['CreateInvoice', 'SenderName', 'RecieverName', 'Address', 'Date', 'InvoiceNumber', 'Description','Notes','ShowInvoice']
 
-# this dicionary works as a follower to which step are we if the step is 0 then we didn't come to that step yet
 InvoiceProccess = {InvoicingProccess[0] : 0, InvoicingProccess[1] : 0, InvoicingProccess[2] : 0, InvoicingProccess[3] : 0, InvoicingProccess[4] : 0, InvoicingProccess[5] : 0,InvoicingProccess[6] : 0,InvoicingProccess[7] : 0, InvoicingProccess[8] : 0}
 
-# this dicionary will have all the invoice information
 INVOICE = {}
-
-# stage variable 
 stage = 0
 wouldYouMakeInvoice = False
 itemsInserted = 0
@@ -58,25 +52,32 @@ def chatBox():
                 GetIntent = 'CreateInvoice'
                 stage = 0
                 wouldYouMakeInvoice = False
-        if GetIntent == 'CreateInvoice' or InvoiceProccess[InvoicingProccess[0]] == 1:
-            if InvoiceProccess[InvoicingProccess[0]] == 0:
+        if GetIntent == 'CreateInvoice' or stage > 0:
+            print(GetIntent)
+            if stage == 0:
                 FromName()
-            elif InvoiceProccess[InvoicingProccess[1]] == 0:
+                stage += 1
+            elif stage == 1:
                 INVOICE['FROMName'] = Message
                 ToName()
-            elif InvoiceProccess[InvoicingProccess[2]] == 0:
+                stage += 1
+            elif stage == 2:
                 INVOICE['TOName'] = Message
                 GetAddress()
-            elif InvoiceProccess[InvoicingProccess[3]] == 0:
+                stage += 1
+            elif stage == 3:
                 INVOICE['Address'] = Message
                 GetDate()
-            elif InvoiceProccess[InvoicingProccess[4]] == 0:
+                stage += 1
+            elif stage == 4:
                 INVOICE['Date'] = Message
                 GetInvoiceNumber()
-            elif InvoiceProccess[InvoicingProccess[5]] == 0:
+                stage += 1
+            elif stage == 5:
                 INVOICE['InvoiceNumber'] = Message
                 GetItems()
-            elif InvoiceProccess[InvoicingProccess[6]] == 0:
+                stage += 1
+            elif stage == 6:
                 if stage6Entered == False:
                     INVOICE['NumOfItems'] = int(Message)
                     print("Invoice : ")
@@ -97,17 +98,20 @@ def chatBox():
                         INVOICE.setdefault('Price', []).append(Message)
                         ItemNumber=1
                         itemsInserted+=1
+                print("***")
+                print(itemsInserted)
 
                 if itemsInserted == int(INVOICE['NumOfItems']):
+                    stage += 1
                     wouldYouMakeNote()
-                    InvoiceProccess[InvoicingProccess[6]] = 1
-            elif InvoiceProccess[InvoicingProccess[7]] == 0:
+            elif stage == 7:
                 if LuisMagic(Message) == 'Agree':
                     GetNotes()
-
+                    stage+=1
                 else:
+                    stage = 9
                     Finish()
-            elif InvoiceProccess[InvoicingProccess[8]] == 0:
+            elif stage == 8:
                 INVOICE['Notes'] = Message
                 Finish()
             else:
@@ -186,16 +190,15 @@ def WantToAddInvoice():
 
 
 def GetNotes():
-    if InvoiceProccess[InvoicingProccess[7]] == 0:
+    if InvoiceProccess[InvoicingProccess[6]] == 0:
         Messages.append("Please enter Notes : ")
-        InvoiceProccess[InvoicingProccess[7]] = 1
-
+        InvoiceProccess[InvoicingProccess[6]] = 1
     else:
         return
 
 def Finish():
-    if InvoiceProccess[InvoicingProccess[8]] == 0:
-        InvoiceProccess[InvoicingProccess[8]] = 1
+    if InvoiceProccess[InvoicingProccess[7]] == 0:
+        InvoiceProccess[InvoicingProccess[7]] = 1
         Messages.append("Done! redirecting the the invoice")
         #InvoiceReport()
         return redirect(url_for('InvoiceReport'))
