@@ -45,7 +45,7 @@ def getMessage():
     return Message
 
 
-# THE FUNCTION WHERE EVERYTHING WORK USING IT. 
+# THE FUNCTION WHERE THE CHAT PROCCESS BEEN HANDLED BY IT. 
 @chatApp.route('/chat', methods = ['POST','GET'])
 def chatBox():
     Message = getMessage()
