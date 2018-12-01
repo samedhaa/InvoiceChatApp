@@ -1,4 +1,5 @@
 from flask import Flask, render_template, request, url_for, jsonify, redirect
+from flask_weasyprint import HTML, render_pdf
 import urllib.request
 import json
 import datetime
@@ -33,6 +34,12 @@ stage6Entered = False
 @chatApp.route('/invoice', methods = ['POST','GET'])
 def InvoiceReport():
     return render_template("invoice.html", result=INVOICE)
+
+# This url have the pdf of the invoice.
+@chatApp.route('/hello.pdf')
+def hello_pdf():
+    # Make a PDF from another view
+    return render_pdf(url_for('InvoiceReport'))
 
 # A function where have all the messages as a json file
 @chatApp.route('/chat/GetMessages', methods = ['POST','GET'])
@@ -208,10 +215,11 @@ def GetNotes():
 def Finish():
     if InvoiceProccess[InvoicingProccess[8]] == 0:
         InvoiceProccess[InvoicingProccess[8]] = 1
-        Messages.append("Done! redirecting the the invoice")
+        Messages.append("Done! redirecting the the invoice! FML")
         #InvoiceReport()
         # The redirecting is not ready yet.
-        return redirect(url_for('InvoiceReport'))
+        #return redirect(url_for('InvoiceReport'))
+        hello_pdf()
 
     else:
         Messages.append("Would you like to make an invoice")
