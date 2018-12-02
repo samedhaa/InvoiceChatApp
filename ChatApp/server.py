@@ -36,8 +36,9 @@ def InvoiceReport():
     return render_template("invoice.html", result=INVOICE)
 
 # This url have the pdf of the invoice.
-@chatApp.route('/hello.pdf')
-def hello_pdf():
+
+@chatApp.route('/InvoiceTo.pdf')
+def MakePdfInvoice():
     # Make a PDF from another view
     return render_pdf(url_for('InvoiceReport'))
 
@@ -219,7 +220,7 @@ def Finish():
         #InvoiceReport()
         # The redirecting is not ready yet.
         #return redirect(url_for('InvoiceReport'))
-        hello_pdf()
+        MakePdfInvoice()
 
     else:
         Messages.append("Would you like to make an invoice")
