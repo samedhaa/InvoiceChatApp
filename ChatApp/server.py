@@ -24,10 +24,11 @@ INVOICE = {}
 wouldYouMakeInvoice = False
 
 # Those variables are for entering the items 
-itemsInserted = 0
-ItemNumber  = 1
-stage6Entered = False
-
+ItemStage = 1.0
+stage6GetItem = False
+stage6GetQuantity= False
+stage6GetPrice = False
+AddMoreItem = False
 
 
 # A function that route to /invoice where the last invoice is exist
@@ -58,9 +59,11 @@ def getMessage():
 def chatBox():
     Message = getMessage()
     global wouldYouMakeInvoice
-    global ItemNumber
-    global itemsInserted
-    global stage6Entered
+    global ItemStage
+    global stage6GetItem
+    global stage6GetQuantity
+    global stage6GetPrice
+    global AddMoreItem
     if Message != 'None':
         GetIntent = LuisMagic(Message)
         Messages.append(Message)
@@ -88,34 +91,41 @@ def chatBox():
             elif InvoiceProccess[InvoicingProccess[4]] == 0:
                 INVOICE['Date'] = Message
                 GetInvoiceNumber()
-            elif InvoiceProccess[InvoicingProccess[5]] == 0:
-                INVOICE['InvoiceNumber'] = Message
-                GetItems()
-            elif InvoiceProccess[InvoicingProccess[6]] == 0:
-                if stage6Entered == False:
-                    INVOICE['NumOfItems'] = int(Message)
-                    print("Invoice : ")
-                    print(INVOICE['NumOfItems'])
-                    if INVOICE['NumOfItems'] > 0:
-                        Messages.append("Please add the name of the item press enter")
-                        Messages.append("and then add the quantity and press enter")
-                        Messages.append("and then add the price and press enter")
-                        stage6Entered = True
-                else:
-                    if ItemNumber == 1:
-                        INVOICE.setdefault('Item', []).append(Message)
-                        ItemNumber+=1
-                    elif ItemNumber == 2:
-                        INVOICE.setdefault('Quantity', []).append(Message)
-                        ItemNumber+=1
-                    else:
-                        INVOICE.setdefault('Price', []).append(Message)
-                        ItemNumber=1
-                        itemsInserted+=1
+            elif InvoiceProccess[InvoicingProccess[5]] == 0 or InvoiceProccess[InvoicingProccess[6]] == 0:
+            	if InvoiceProccess[InvoicingProccess[5]] == 0:
+                	INVOICE['InvoiceNumber'] = Message
+                	InvoiceProccess[InvoicingProccess[5]] = 1
+                	Messages.append("Please add the name of the item")
+            	else: 
+	            	print("Homie i'm in!")
+	            	if stage6GetItem == False:
+	            		print("I'm in too!")
+            			INVOICE.setdefault('Item', []).append(Message)
+            			stage6GetItem = True
+            			ItemStage = 2.0
+            			Messages.append("What is the quantity ?")
 
-                if itemsInserted == int(INVOICE['NumOfItems']):
-                    wouldYouMakeNote()
-                    InvoiceProccess[InvoicingProccess[6]] = 1
+	            	elif stage6GetQuantity == False:
+            			INVOICE.setdefault('Quantity', []).append(Message)
+            			stage6GetQuantity = True
+            			ItemStage = 3.0
+            			Messages.append("and how much ? ")
+	            	elif stage6GetPrice == False:
+	           			INVOICE.setdefault('Price', []).append(Message)
+	           			stage6GetPrice = True
+	           			ItemStage = 4.0
+	           			Messages.append("Woud you like to add a new item ? ")
+	            	elif AddMoreItem == False:
+		           		if LuisMagic(Message) == 'Agree':
+		           			ItemStage = 1.0
+		           			stage6GetPrice = False
+		           			stage6GetQuantity = False
+		           			stage6GetItem = False
+		           			AddMoreItem = False
+		           			Messages.append("Please add the name of the item")
+		           		else:
+		           			wouldYouMakeNote()
+		           			InvoiceProccess[InvoicingProccess[6]] = 1
             elif InvoiceProccess[InvoicingProccess[7]] == 0:
                 if LuisMagic(Message) == 'Agree':
                     GetNotes()
@@ -192,12 +202,6 @@ def GetInvoiceNumber():
     if InvoiceProccess[InvoicingProccess[4]] == 0:
         Messages.append("Please enter the InvoiceNumber : ")
         InvoiceProccess[InvoicingProccess[4]] = 1
-    else:
-        return
-def GetItems():
-    if InvoiceProccess[InvoicingProccess[5]] == 0:
-        Messages.append("How Many items would you like to add ? ")
-        InvoiceProccess[InvoicingProccess[5]] = 1
     else:
         return
 
