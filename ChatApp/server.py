@@ -97,9 +97,7 @@ def chatBox():
                 	InvoiceProccess[InvoicingProccess[5]] = 1
                 	Messages.append("Please add the name of the item")
             	else: 
-	            	print("Homie i'm in!")
 	            	if stage6GetItem == False:
-	            		print("I'm in too!")
             			INVOICE.setdefault('Item', []).append(Message)
             			stage6GetItem = True
             			ItemStage = 2.0
