@@ -92,38 +92,38 @@ def chatBox():
                 INVOICE['Date'] = Message
                 GetInvoiceNumber()
             elif InvoiceProccess[InvoicingProccess[5]] == 0 or InvoiceProccess[InvoicingProccess[6]] == 0:
-            	if InvoiceProccess[InvoicingProccess[5]] == 0:
-                	INVOICE['InvoiceNumber'] = Message
-                	InvoiceProccess[InvoicingProccess[5]] = 1
-                	Messages.append("Please add the name of the item")
-            	else: 
-	            	if stage6GetItem == False:
-            			INVOICE.setdefault('Item', []).append(Message)
-            			stage6GetItem = True
-            			ItemStage = 2.0
-            			Messages.append("What is the quantity ?")
+                if InvoiceProccess[InvoicingProccess[5]] == 0:
+                    INVOICE['InvoiceNumber'] = Message
+                    InvoiceProccess[InvoicingProccess[5]] = 1
+                    Messages.append("Please add the name of the item")
+                else: 
+                    if stage6GetItem == False:
+                        INVOICE.setdefault('Item', []).append(Message)
+                        stage6GetItem = True
+                        ItemStage = 2.0
+                        Messages.append("What is the quantity ?")
 
-	            	elif stage6GetQuantity == False:
-            			INVOICE.setdefault('Quantity', []).append(Message)
-            			stage6GetQuantity = True
-            			ItemStage = 3.0
-            			Messages.append("and how much ? ")
-	            	elif stage6GetPrice == False:
-	           			INVOICE.setdefault('Price', []).append(Message)
-	           			stage6GetPrice = True
-	           			ItemStage = 4.0
-	           			Messages.append("Woud you like to add a new item ? ")
-	            	elif AddMoreItem == False:
-		           		if LuisMagic(Message) == 'Agree':
-		           			ItemStage = 1.0
-		           			stage6GetPrice = False
-		           			stage6GetQuantity = False
-		           			stage6GetItem = False
-		           			AddMoreItem = False
-		           			Messages.append("Please add the name of the item")
-		           		else:
-		           			wouldYouMakeNote()
-		           			InvoiceProccess[InvoicingProccess[6]] = 1
+                    elif stage6GetQuantity == False:
+                        INVOICE.setdefault('Quantity', []).append(Message)
+                        stage6GetQuantity = True
+                        ItemStage = 3.0
+                        Messages.append("and how much ? ")
+                    elif stage6GetPrice == False:
+                        INVOICE.setdefault('Price', []).append(Message)
+                        stage6GetPrice = True
+                        ItemStage = 4.0
+                        Messages.append("Woud you like to add a new item ? ")
+                    elif AddMoreItem == False:
+                        if LuisMagic(Message) == 'Agree':
+                            ItemStage = 1.0
+                            stage6GetPrice = False
+                            stage6GetQuantity = False
+                            stage6GetItem = False
+                            AddMoreItem = False
+                            Messages.append("Please add the name of the item")
+                        else:
+                            wouldYouMakeNote()
+                            InvoiceProccess[InvoicingProccess[6]] = 1
             elif InvoiceProccess[InvoicingProccess[7]] == 0:
                 if LuisMagic(Message) == 'Agree':
                     GetNotes()
@@ -153,7 +153,7 @@ def LuisMagic(Message):
             KEYWORD = KEYWORD + Message[i]
 
     # making the last URL for where the intent of our message is.
-    luis = "https://westus.api.cognitive.microsoft.com/luis/v2.0/apps/3ca01edc-15d6-4ee6-b481-b2840cd6b476?subscription-key=11f1b249304d47bc852d57eb73f036fc&timezoneOffset=-360&q=" + KEYWORD
+    luis = "https://westus.api.cognitive.microsoft.com/luis/v2.0/apps/3ca01edc-15d6-4ee6-b481-b2840cd6b476?subscription-key=11f1b249304d47bc852d57eb73f036fc&verbose=true&timezoneOffset=-360&q=" + KEYWORD
 
     # making luis understand the message and json it. 
     with urllib.request.urlopen(luis) as url:
