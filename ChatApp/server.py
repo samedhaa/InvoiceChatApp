@@ -2,7 +2,7 @@ from flask import Flask, render_template, request, url_for, jsonify, redirect
 from flask_weasyprint import HTML, render_pdf
 import urllib.request
 import json
-import datetime
+from datetime import date
 
 
 
@@ -88,9 +88,18 @@ def chatBox():
             elif InvoiceProccess[InvoicingProccess[3]] == 0:
                 INVOICE['Address'] = Message
                 GetDate()
-            elif InvoiceProccess[InvoicingProccess[4]] == 0:
-                INVOICE['Date'] = Message
-                GetInvoiceNumber()
+            elif InvoiceProccess[InvoicingProccess[4]] == 0 or InvoiceProccess[InvoicingProccess[4]] == -1 :
+                if(InvoiceProccess[InvoicingProccess[4]] == -1):
+                    INVOICE['Date'] = Message
+                    GetInvoiceNumber()
+                elif(LuisMagic(Message) == 'Agree'):
+                    INVOICE['Date'] = str(date.today())
+                    GetInvoiceNumber()
+                elif(InvoiceProccess[InvoicingProccess[4]] != -1):
+                    Messages.append("Please enter the date for this invoice")
+                    InvoiceProccess[InvoicingProccess[4]] = -1
+
+                    
             elif InvoiceProccess[InvoicingProccess[5]] == 0 or InvoiceProccess[InvoicingProccess[6]] == 0:
                 if InvoiceProccess[InvoicingProccess[5]] == 0:
                     INVOICE['InvoiceNumber'] = Message
@@ -191,13 +200,13 @@ def GetAddress():
 
 def GetDate():
     if InvoiceProccess[InvoicingProccess[3]] == 0:
-        Messages.append("Please enter the date of this invoice ")
+        Messages.append("Would you like the date to be today's date : " + str(date.today()) + "?")
         InvoiceProccess[InvoicingProccess[3]] = 1
     else:
         return
 
 def GetInvoiceNumber():
-    if InvoiceProccess[InvoicingProccess[4]] == 0:
+    if InvoiceProccess[InvoicingProccess[4]] == 0 or InvoiceProccess[InvoicingProccess[4]] == -1 :
         Messages.append("Please enter the InvoiceNumber : ")
         InvoiceProccess[InvoicingProccess[4]] = 1
     else:
