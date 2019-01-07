@@ -1,15 +1,10 @@
-from flask import Flask, render_template, request, url_for, jsonify, redirect
-from flask_weasyprint import HTML, render_pdf
+from flask import Flask, render_template, request, url_for, jsonify, redirect, send_from_directory
+#from flask_weasyprint import HTML, render_pdf
 import urllib.request
 import json
 from datetime import date
 
-
-
 chatApp = Flask(__name__)
-
-Messages = ['Hi im a bot']
-
 
 # a list has the steps of the invoice
 InvoicingProccess = ['CreateInvoice', 'SenderName', 'RecieverName', 'Address', 'Date', 'InvoiceNumber', 'Description','Notes','ShowInvoice']
@@ -23,13 +18,22 @@ INVOICE = {}
 # If luis.ai didn't understand if you want to make invoice or not we do it manually using this variable
 wouldYouMakeInvoice = False
 
-# Those variables are for entering the items 
+# Those variables are for entering the items py 
 ItemStage = 1.0
 stage6GetItem = False
 stage6GetQuantity= False
 stage6GetPrice = False
 AddMoreItem = False
 
+
+
+#initialize Messages
+Messages = ['Hi im a bot']
+
+# to serve static assets
+@chatApp.route('/assets/<path:path>')
+def send_asset(path):
+    return send_from_directory('assets', path)
 
 # A function that route to /invoice where the last invoice is exist
 @chatApp.route('/invoice', methods = ['POST','GET'])
@@ -46,7 +50,8 @@ def MakePdfInvoice():
 # A function where have all the messages as a json file
 @chatApp.route('/chat/GetMessages', methods = ['POST','GET'])
 def getallMessages():
-    return jsonify(results = Messages)
+    newMessages = Messages[::-1]
+    return jsonify(results = [newMessages[0]])
 
 # A function that gets the message from chat.html
 def getMessage():
@@ -66,8 +71,6 @@ def chatBox():
     global AddMoreItem
     if Message != 'None':
         GetIntent = LuisMagic(Message)
-        Messages.append(Message)
-        getallMessages()
         # Checking manually if the person want to make an invoice - might not be neccessary it should be the default
         # to start the invoice. the variable 'wouldYouMakeInvoice' get changed in an else statement down the function.
         if wouldYouMakeInvoice == True:
@@ -146,9 +149,12 @@ def chatBox():
                 Finish()
         else:
             Messages.append("Would you like to make an invoice ? ")
-            wouldYouMakeInvoice = True
+            wouldYouMakeInvoice = True 
 
-    return render_template("chat.html", string=Messages)
+    
+    getallMessages()
+    return render_template("chat.html")
+
 
 # A function where all the Magic happen, e.g Abrakadabra
 def LuisMagic(Message):
