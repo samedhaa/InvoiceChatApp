@@ -19,7 +19,6 @@ INVOICE = {}
 wouldYouMakeInvoice = False
 
 # Those variables are for entering the items py 
-ItemStage = 1.0
 stage6GetItem = False
 stage6GetQuantity= False
 stage6GetPrice = False
@@ -64,7 +63,6 @@ def getMessage():
 def chatBox():
     Message = getMessage()
     global wouldYouMakeInvoice
-    global ItemStage
     global stage6GetItem
     global stage6GetQuantity
     global stage6GetPrice
@@ -112,22 +110,18 @@ def chatBox():
                     if stage6GetItem == False:
                         INVOICE.setdefault('Item', []).append(Message)
                         stage6GetItem = True
-                        ItemStage = 2.0
                         Messages.append("What is the quantity ?")
 
                     elif stage6GetQuantity == False:
                         INVOICE.setdefault('Quantity', []).append(Message)
                         stage6GetQuantity = True
-                        ItemStage = 3.0
                         Messages.append("and how much ? ")
                     elif stage6GetPrice == False:
                         INVOICE.setdefault('Price', []).append(Message)
                         stage6GetPrice = True
-                        ItemStage = 4.0
                         Messages.append("Woud you like to add a new item ? ")
                     elif AddMoreItem == False:
                         if LuisMagic(Message) == 'Agree':
-                            ItemStage = 1.0
                             stage6GetPrice = False
                             stage6GetQuantity = False
                             stage6GetItem = False
@@ -149,7 +143,7 @@ def chatBox():
                 Finish()
         else:
             Messages.append("Would you like to make an invoice ? ")
-            wouldYouMakeInvoice = True 
+            wouldYouMakeInvoice = True
 
     
     getallMessages()
