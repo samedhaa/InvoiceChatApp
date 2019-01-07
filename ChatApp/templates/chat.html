@@ -37,7 +37,7 @@
             <div id="messages" class="msg_history">
 
             </div>
-            <div class="type_msg">
+            <div class="type_msg" style="margin-top: 20px;">
                 <div class="input_msg_write">
                     <input type="text" id="message_text" class="write_msg" placeholder="Type a message" name="Message">
                     <button class="msg_send_btn" type="button" id="sendMessage"><i class="fa fa-paper-plane-o" aria-hidden="true"></i></button>
@@ -73,22 +73,21 @@
                     '</div><div class="received_msg"><div class="received_withd_msg">' +
                     '<p>' +data + '</p>' + 
                     '</div></div></div>');   
-
+                    //scroll to bottom of div on update
+                    document.getElementById("messages").scrollTop = document.getElementById("messages").scrollHeight;
 
             }
 
         });
     }
-    $("#GetMessages").click(function () {
-
-        getMessages();
-    });
-    $("#sendMessage").click(function () {
-        var data = $("#message_text").val();
+    function sendmessage(){
+    var data = $("#message_text").val();
         if(data.length > 0 ){
 
             $("#message_text").val("");
             $("#messages").append('<div class="outgoing_msg"><div class="sent_msg"><p>' + data + '</p>' + '</div></div>');
+            //scroll to bottom of div on update
+            document.getElementById("messages").scrollTop = document.getElementById("messages").scrollHeight;
             $.ajax({
                 url: "chat",
                 method: "POST",
@@ -98,5 +97,21 @@
                 }
             });
         }
+    }
+    
+    $("#GetMessages").click(function () {
+        
+        getMessages();
     });
+    $("#sendMessage").click(function () {
+        sendmessage();
+    });
+    $("#message_text").on('keyup', function (e) {
+        //13 is the enter key
+        if (e.keyCode == 13) {
+            sendmessage();
+        }
+    });
+
+
 </script>
