@@ -41,7 +41,7 @@ def InvoiceReport():
 
 # This url have the pdf of the invoice.
 
-@chatApp.route('/InvoiceTo.pdf')
+@chatApp.route('/InvoiceTo.pdf', methods = ['POST','GET'])
 def MakePdfInvoice():
     # Make a PDF from another view
     return render_pdf(url_for('InvoiceReport'))
@@ -224,20 +224,23 @@ def GetNotes():
     else:
         return
 
+def wouldYouMakeNote():
+    Messages.append("Do you want to make a note ? ")
+
+
 def Finish():
     if InvoiceProccess[InvoicingProccess[8]] == 0:
         InvoiceProccess[InvoicingProccess[8]] = 1
-        Messages.append("Done! redirecting the the invoice! FML")
+        Messages.append("Done! redirecting the the invoice")
         #InvoiceReport()
         # The redirecting is not ready yet.
         #return redirect(url_for('InvoiceReport'))
         MakePdfInvoice()
+        #return redirect(url_for('/InvoiceReport'), code = 301) ## not working 
+
 
     else:
         Messages.append("Would you like to make an invoice")
-
-def wouldYouMakeNote():
-    Messages.append("Do you want to make a note ? ")
 
 
 if __name__ == "__main__":
