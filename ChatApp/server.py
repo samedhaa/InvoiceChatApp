@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, url_for, jsonify, redirect, send_from_directory
-#from flask_weasyprint import HTML, render_pdf
+from flask_weasyprint import HTML, render_pdf
 import urllib.request
 import json
 from datetime import date
