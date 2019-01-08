@@ -12,6 +12,8 @@ InvoicingProccess = ['CreateInvoice', 'SenderName', 'RecieverName', 'Address', '
 # this dicionary works as a follower to which step are we if the step is 0 then we didn't come to that step yet
 InvoiceProccess = {InvoicingProccess[0] : 0, InvoicingProccess[1] : 0, InvoicingProccess[2] : 0, InvoicingProccess[3] : 0, InvoicingProccess[4] : 0, InvoicingProccess[5] : 0,InvoicingProccess[6] : 0,InvoicingProccess[7] : 0, InvoicingProccess[8] : 0}
 
+# what currencies the AI know
+currencies = ['Dollar', 'Euro', 'Pound sterling']
 # this dicionary will have all the invoice information
 INVOICE = {}
 
@@ -22,7 +24,9 @@ wouldYouMakeInvoice = False
 stage6GetItem = False
 stage6GetQuantity= False
 stage6GetPrice = False
+stage6PriceCurrency = False
 AddMoreItem = False
+
 
 
 
@@ -61,11 +65,12 @@ def getMessage():
 # THE FUNCTION WHERE THE CHAT PROCCESS BEEN HANDLED BY IT. 
 @chatApp.route('/chat', methods = ['POST','GET'])
 def chatBox():
-    Message = getMessage()
+    Message = str(getMessage())
     global wouldYouMakeInvoice
     global stage6GetItem
     global stage6GetQuantity
     global stage6GetPrice
+    global stage6PriceCurrency
     global AddMoreItem
     if Message != 'None':
         GetIntent = LuisMagic(Message)
@@ -117,9 +122,32 @@ def chatBox():
                         stage6GetQuantity = True
                         Messages.append("and how much ? ")
                     elif stage6GetPrice == False:
-                        INVOICE.setdefault('Price', []).append(Message)
-                        stage6GetPrice = True
-                        Messages.append("Woud you like to add a new item ? ")
+                        if(stage6PriceCurrency == True):
+                            INVOICE.setdefault('Currency', []).append(Message)
+                            stage6GetPrice = True
+                        else:
+
+                            itemPrice = ""
+                            itemCurrency = LuisMagic(Message)
+
+                            # filtering between the price and the currency('if it's there')
+                            for i in Message:
+                                if itemPrice != "" and (i.isdigit() == False):
+                                    break
+                                else:
+                                    itemPrice = itemPrice + i
+
+                            INVOICE.setdefault('Price', []).append(itemPrice)
+
+                            if(itemCurrency not in currencies):
+                                Messages.append("what currency ? ")
+                                stage6PriceCurrency = True
+                            else:
+                                INVOICE.setdefault('Currency', []).append(itemCurrency)
+                                stage6GetPrice = True
+
+
+                        Messages.append("Would you like to add a new item ? ")
                     elif AddMoreItem == False:
                         if LuisMagic(Message) == 'Agree':
                             stage6GetPrice = False
