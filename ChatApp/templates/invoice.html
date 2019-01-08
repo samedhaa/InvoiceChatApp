@@ -9,14 +9,12 @@
 <!-- set page A4 sized paper-->
 <body style="width: 210mm;height: 297mm; border:1px black solid">
 
-<table>
-{% for key, value in result.items() %}
-   <tr>
-        <th> {{ key }} </th>
-        <td> {{ value }} </td>
-   </tr>
-{% endfor %}
-</table>
+<script>
+    //Convert Python array into json
+    var invoiceData = JSON.parse('{{ result | tojson | safe}}');
+    console.log(invoiceData);
+    
+</script>
 
 <div class="invoice-container">
     <div class="invoice-detail-accent" style="background-color: rgb(51, 51, 51);"></div>
