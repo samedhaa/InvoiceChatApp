@@ -10,7 +10,8 @@ chatApp = Flask(__name__)
 InvoicingProccess = ['CreateInvoice', 'SenderName', 'RecieverName', 'Address', 'Date', 'InvoiceNumber', 'Description','Notes','ShowInvoice']
 
 # this dicionary works as a follower to which step are we if the step is 0 then we didn't come to that step yet
-InvoiceProccess = {InvoicingProccess[0] : 0, InvoicingProccess[1] : 0, InvoicingProccess[2] : 0, InvoicingProccess[3] : 0, InvoicingProccess[4] : 0, InvoicingProccess[5] : 0,InvoicingProccess[6] : 0,InvoicingProccess[7] : 0, InvoicingProccess[8] : 0}
+#InvoiceProccess = {InvoicingProccess[0] : 0, InvoicingProccess[1] : 0, InvoicingProccess[2] : 0, InvoicingProccess[3] : 0, InvoicingProccess[4] : 0, InvoicingProccess[5] : 0,InvoicingProccess[6] : 0,InvoicingProccess[7] : 0, InvoicingProccess[8] : 0}
+InvoiceProccess = {key:0 for key in InvoicingProccess}
 
 # what currencies the AI know
 currencies = ['Dollar', 'Euro', 'Pound sterling']
@@ -125,6 +126,8 @@ def chatBox():
                         if(stage6PriceCurrency == True):
                             INVOICE.setdefault('Currency', []).append(Message)
                             stage6GetPrice = True
+                            Messages.append("Would you like to add a new item ? ")
+
                         else:
 
                             itemPrice = ""
@@ -145,9 +148,9 @@ def chatBox():
                             else:
                                 INVOICE.setdefault('Currency', []).append(itemCurrency)
                                 stage6GetPrice = True
+                                Messages.append("Would you like to add a new item ? ")
 
 
-                        Messages.append("Would you like to add a new item ? ")
                     elif AddMoreItem == False:
                         if LuisMagic(Message) == 'Agree':
                             stage6GetPrice = False
@@ -259,7 +262,7 @@ def wouldYouMakeNote():
 def Finish():
     if InvoiceProccess[InvoicingProccess[8]] == 0:
         InvoiceProccess[InvoicingProccess[8]] = 1
-        Messages.append("Done! redirecting the the invoice")
+        Messages.append('<a href="InvoiceTo.pdf">The invoice is Done! Click here to get it.</a>')
         #InvoiceReport()
         # The redirecting is not ready yet.
         #return redirect(url_for('InvoiceReport'))
@@ -272,4 +275,4 @@ def Finish():
 
 
 if __name__ == "__main__":
-    chatApp.run(debug=True)
+    chatApp.run(debug=True,port = 1235)
