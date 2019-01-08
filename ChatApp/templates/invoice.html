@@ -3,8 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <title></title>
+    <link href="/assets/invoice.css" rel="stylesheet" />
+
 </head>
-<body>
+<!-- set page A4 sized paper-->
+<body style="width: 210mm;height: 297mm; border:1px black solid">
 
 <table>
 {% for key, value in result.items() %}
@@ -15,6 +18,172 @@
 {% endfor %}
 </table>
 
+<div class="invoice-container">
+    <div class="invoice-detail-accent" style="background-color: rgb(51, 51, 51);"></div>
+    <div class="invoice-detail-body">
+        <div class="invoice-detail-title content-block">
+            <div class="d-flex justify-content-between">
+                <div class="invoice-title">
+                    <h2><span>Invoice</span></h2>
+                </div>
+                <div class="invoice-logo">
+                    <div class="photo-drop">
+                        <div class="photo-drop-preview">
+                            <img alt="">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="invoice-detail-header content-block">
+            <div class="row">
+                <div class="col-md invoice-address invoice-address-company">
+                    <h3>From</h3>
+                    <h4>Name</h4>
+                    <div class="preview-block">Email@email.com</div>
+                    <div class="preview-block">
+                        <div>Address</div>
+                        <div>City,State</div>
+                        <div>Zip Codeq</div>
+                    </div>
+                    <div class="preview-block">
+                        <span class="preview-label" title="Phone Number">P:</span>
+                        <span class="preview-value"> Phone Number</span>
+                    </div>
+                    <div class="preview-block">
+                        <span class="preview-label" title="Business Number">Business Number:</span>
+                        <span class="preview-value"> BuisnessNumber</span>
+                    </div>
+                </div>
+                <div class="col-md invoice-address invoice-address-client">
+                    <h3>To</h3>
+                    <h4>ClientName</h4>
+                    <div class="preview-block">Email@email.com</div>
+                    <div class="preview-block">
+                        <div>Address2</div>
+                        <div>City,State2</div>
+                        <div>Zip Code1</div>
+                    </div>
+                    <div class="preview-block">
+                        <span class="preview-label" title="Phone Number">P:</span>
+                        <span class="preview-value"> Phone Number</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr class="divider lite margin">
+        <div class="invoice-detail-terms content-block">
+            <div class="row">
+                <div class="col-md-6 invoice-address invoice-address-terms">
+                    <div class="terms-item-view">
+                        <span>Number</span>
+                        <span>INV0001</span>
+                    </div>
+                    <div class="terms-item-view">
+                        <span>Date</span>08 Jan 2019
+                    </div>
+                    <div class="terms-item-view">
+                        <span>Terms</span>
+                        <span>Custom</span>
+                    </div>
+                    <div class="terms-item-view">
+                        <span>Due</span>
+                        <span>17 Jan 2019</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--=================== Items ==================-->
+        <div class="invoice-item-list content-block">
+            <table class="table invoice-table invoice-table-view">
+                <thead class="thead">
+                    <tr>
+                        <th class="invoice-detail-margin" style="background-color: rgb(51, 51, 51) !important; color: rgb(255, 255, 255);">&nbsp;</th>
+                        <th class="invoice-detail-summary" style="background-color: rgb(51, 51, 51) !important; color: rgb(255, 255, 255);">Description</th>
+                        <th class="invoice-detail-rate" style="background-color: rgb(51, 51, 51) !important; color: rgb(255, 255, 255);">Price</th>
+                        <th class="invoice-detail-quantity" style="background-color: rgb(51, 51, 51) !important; color: rgb(255, 255, 255);">Qty</th>
+                        <th class="invoice-detail-total" style="background-color: rgb(51, 51, 51) !important; color: rgb(255, 255, 255);">Amount</th>
+                        <th class="invoice-detail-margin" style="background-color: rgb(51, 51, 51) !important; color: rgb(255, 255, 255);">&nbsp;</th>
+                    </tr>
+                </thead>
+                <tbody class="invoice-items">
+                    <tr class="item-row item-row-1" style="border-bottom: 1px solid rgb(51, 51, 51);">
+                        <td class="invoice-detail-margin"></td>
+                        <td data-label="Item #1" class="item-row-summary">
+                            <span class="item-row-name">item1</span>
+                            <span class="item-row-description"><span>
+                                    <br></span></span></td>
+                        <td data-label="Price" class="item-row-rate">
+                            <span class="currency"><span class="currency-symbol">$</span>
+                                <span class="currency-amount">1.00</span>
+                            </span>
+                        </td>
+                        <td data-label="Quantity" class="item-row-quantity">1</td>
+                        <td data-label="Amount" class="item-row-amount">
+                            <span class="currency amount">
+                                <span class="currency-symbol">$</span>
+                                <span class="currency-amount">1.00</span>
+                            </span></td>
+                        <td class="invoice-detail-margin"></td>
+
+                    </tr>
+                    <tr class="item-row item-row-2">
+                        <td class="invoice-detail-margin"></td>
+                        <td data-label="Item #2" class="item-row-summary">
+                            <span class="item-row-name">item2</span>
+                            <span class="item-row-description"><span>
+                                    <br></span></span>
+                        </td>
+                        <td data-label="Price" class="item-row-rate">
+                            <span class="currency"><span class="currency-symbol">$</span><span class="currency-amount">2.00</span></span></td>
+                        <td data-label="Quantity" class="item-row-quantity">2</td>
+                        <td data-label="Amount" class="item-row-amount">
+                            <span class="currency amount">
+                                <span class="currency-symbol">$</span>
+                                <span class="currency-amount">4.00</span>
+                            </span></td>
+                        <td class="invoice-detail-margin"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <hr class="divider margin" style="background-color: rgb(51, 51, 51);">
+        <div class="invoice-totals-container content-block">
+            <div class="invoice-totals-row desktop undefined">
+                <div class="invoice-summary-label">Subtotal</div>
+                <div class="invoice-summary-value">
+                    <span class="currency">
+                        <span class="currency-symbol">$</span>
+                        <span class="currency-amount">5.00</span></span>
+                </div>
+            </div>
+            <div class="invoice-totals-row desktop undefined">
+                <div class="invoice-summary-label">Tax (0%)</div>
+                <div class="invoice-summary-value">
+                    <span class="currency"><span class="currency-symbol">$</span><span class="currency-amount">0.00</span></span>
+                </div>
+            </div>
+            <div class="invoice-totals-row desktop undefined">
+                <div class="invoice-summary-label">Total</div>
+                <div class="invoice-summary-value"><span class="currency"><span class="currency-symbol">$</span>
+                        <span class="currency-amount">5.00</span></span>
+                </div>
+            </div>
+            <div class="invoice-totals-row bold desktop invoice-summary-balance invoice-balance">
+                <div class="invoice-summary-label">Balance Due</div>
+                <div class="invoice-summary-value"><span class="currency"><span class="currency-symbol">$</span>
+                        <span class="currency-amount">5.00</span></span>
+                </div>
+            </div>
+        </div>
+        <hr class="divider margin" style="background-color: rgb(51, 51, 51);">
+        <div class="invoice-detail-footer content-block">
+            <div class="invoice-detail-notes clearfix">
+                <p><span>Notes<br></span></p>
+            </div>
+        </div>
+    </div>
+</div>
 
 
 </body>
