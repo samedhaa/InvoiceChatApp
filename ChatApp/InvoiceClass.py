@@ -11,7 +11,7 @@ class InvoiceData:
 		self.InvoiceNumber = InvoiceNumber
 		self.Items = []
 		self.Notes = Notes
-	# Add a new item.
+	# Add a new items
 
 	def insertItem(self, Name, Quantity, Price, Currency):
 
@@ -31,6 +31,8 @@ class InvoiceData:
 		DATA = [self.SenderName, self.RecieverName, self.Address, self.Date, self.InvoiceNumber, self.Notes]
 		
 		return DATA
+
+	
 
 
 # This class will have the items that will be added to the invoice

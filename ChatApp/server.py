@@ -3,6 +3,7 @@ from flask_weasyprint import HTML, render_pdf
 import urllib.request
 import json
 from datetime import date
+from InvoiceClass import * # The py file that have the InvoiceClass
 
 chatApp = Flask(__name__)
 
@@ -27,8 +28,6 @@ stage6GetQuantity= False
 stage6GetPrice = False
 stage6PriceCurrency = False
 AddMoreItem = False
-
-
 
 
 #initialize Messages
@@ -275,4 +274,4 @@ def Finish():
 
 
 if __name__ == "__main__":
-    chatApp.run(debug=True,port = 12333)
+    chatApp.run(debug=True,port = 12323)
