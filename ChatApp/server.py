@@ -1,9 +1,9 @@
 from flask import Flask, render_template, request, url_for, jsonify, redirect, send_from_directory
-from flask_weasyprint import HTML, render_pdf
+#from flask_weasyprint import HTML, render_pdf
 import urllib.request
 import json
+from InvoiceClass import *
 from datetime import date
-from InvoiceClass import * # The py file that have the InvoiceClass
 
 chatApp = Flask(__name__)
 
@@ -41,7 +41,15 @@ def send_asset(path):
 # A function that route to /invoice where the last invoice is exist
 @chatApp.route('/invoice', methods = ['POST','GET'])
 def InvoiceReport():
-    return render_template("invoice.html", result=INVOICE)
+
+    obj = InvoiceData("samed","sam","add","2019-01-01","001","mote")
+    obj.insertItem("ja","1","2","1")
+    obj.insertItem("sa","3","4","5")
+
+    #turn obj into json
+    jsonstring = json.dumps(obj, default=lambda x: x.__dict__)
+    print(jsonstring)
+    return render_template("invoice.html", result=jsonstring)
 
 # This url have the pdf of the invoice.
 
@@ -274,4 +282,4 @@ def Finish():
 
 
 if __name__ == "__main__":
-    chatApp.run(debug=True,port = 12323)
+    chatApp.run(debug=True,port = 12333)
