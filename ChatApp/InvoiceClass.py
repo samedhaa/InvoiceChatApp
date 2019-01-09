@@ -9,8 +9,21 @@ class InvoiceData:
 		self.Address = Address
 		self.Date = Date
 		self.InvoiceNumber = InvoiceNumber
+		self.Items = []
 		self.Notes = Notes
+	# Add a new item.
 
+	def insertItem(self, Name, Quantity, Price, Currency):
+
+		# Having an object of ItemsData.
+		item = ItemsData(Name, Quantity, Price, Currency)
+
+		# Insert this object to a list.
+		self.Items.append(item)
+
+	# Return the list that have all the items objects.
+	def getItems(self):
+		return self.Items
 
 	# Returning the data.
 	def getData(self):
@@ -23,28 +36,21 @@ class InvoiceData:
 # This class will have the items that will be added to the invoice
 class ItemsData:
 	# Initialize the data.
-	def __init__(self): 
-		self.itemName = []
-		self.itemQuantity = []
-		self.itemPrice = []
-		self.itemCurrency = []
+	def __init__(self, itemName, itemQuantity, itemPrice, itemCurrency): 
+		self.itemName = itemName
+		self.itemQuantity = itemQuantity
+		self.itemPrice = itemPrice
+		self.itemCurrency = itemCurrency
 
-	# Add a new item.
-	def insert(self, Name, Quantity, Price, Currency):
-		self.itemName.append(Name)
-		self.itemQuantity.append(Quantity)
-		self.itemPrice.append(Price)
-		self.itemCurrency.append(Currency)
+	def ItemsGet(self):
+		return [self.itemName, self.itemQuantity, self.itemPrice, self.itemCurrency]
 
-	# Deleting item.
-	# Will be implemented in another version.
-	def Delete(self, itemNumber):
-		# will have to add item id.
-		pass
 
-	# Returning the items.
-	def getData(self):
-		# This multiD list will have the data for the items.
-		DATA = [self.itemName, self.itemQuantity, self.itemPrice, self.itemCurrency]
-		
-		return DATA
+# TEST.
+'''
+obj = InvoiceData("samed","sam","add","date","num","mote")
+#print(obj) 
+obj.insertItem("ja","1","2","1")
+print obj.getItems()[0].ItemsGet()
+
+'''
